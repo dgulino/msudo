@@ -1,0 +1,28 @@
+on open {filename}
+    set p to POSIX path of filename
+    set myArray to my theSplit(p, "/")
+    set numItems to (count myArray) - 1
+    set AppNameFull to getArrayValue(myArray, numItems)
+    set myArray to my theSplit(AppNameFull, ".")
+    set numItems to (count myArray) - 1
+    set AppName to getArrayValue(myArray, 1)
+    do shell script p & "/Contents/MacOS/" & AppName with administrator privileges
+end open
+
+on theSplit(theString, theDelimiter)
+    -- save delimiters to restore old settings
+    set oldDelimiters to AppleScript's text item delimiters
+    -- set delimiters to delimiter to be used
+    set AppleScript's text item delimiters to theDelimiter
+    -- create the array
+    set theArray to every text item of theString
+    -- restore the old setting
+    set AppleScript's text item delimiters to oldDelimiters
+    -- return the result
+    return theArray
+end theSplit
+
+on getArrayValue(array, location)
+    -- very important -- The list index starts at 1 not 0
+    return item location in array
+end getArrayValue
